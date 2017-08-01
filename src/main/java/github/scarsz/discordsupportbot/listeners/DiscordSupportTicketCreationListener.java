@@ -7,6 +7,7 @@ import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DiscordSupportTicketCreationListener extends ListenerAdapter {
 
@@ -49,7 +50,7 @@ public class DiscordSupportTicketCreationListener extends ListenerAdapter {
         newChannel.sendMessage(messageTemplate
                 .replace("{AUTHOR}", event.getAuthor().getAsMention())
                 .replace("{MESSAGE}", event.getMessage().getRawContent())
-                .replace("{CLOSERS}", "`" + String.join(", ", guildInfo.getRolesAllowedToCloseTickets()) + "`")
+                .replace("{CLOSERS}", "`" + String.join(", ", guildInfo.getRolesAllowedToCloseTickets().stream().map(s -> event.getGuild().getRoleById(s).getName()).collect(Collectors.toList())) + "`")
         ).queue(message -> message.addReaction(guildInfo.getDefaultReactionEmoji()).queue());
 
         event.getMessage().delete().queue();
