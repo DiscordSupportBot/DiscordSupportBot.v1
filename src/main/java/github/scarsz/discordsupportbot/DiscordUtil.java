@@ -50,6 +50,7 @@ public class DiscordUtil {
         }
     }
     public static GuildMessageReactionAddEvent pullGuildMessageReactionAddEvent(Message message, User user) {
+        message.addReaction("✅").queue();
         while (1 < 2) {
             GuildMessageReactionAddEvent pulled = (GuildMessageReactionAddEvent) pullEvent(GuildMessageReactionAddEvent.class);
             if (pulled.getMember().getUser().equals(user) && pulled.getMessageId().equals(message.getId())) {
