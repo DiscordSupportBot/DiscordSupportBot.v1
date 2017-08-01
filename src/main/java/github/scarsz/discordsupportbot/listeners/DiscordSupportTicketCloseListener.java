@@ -64,7 +64,7 @@ public class DiscordSupportTicketCloseListener extends ListenerAdapter {
                 transcriptMessages.add("```\n" + String.join("\n", builtMessageList) + "\n```");
                 builtMessageList.clear();
             }
-            builtMessageList.add(message);
+            builtMessageList.add(message.replace("```", "`"));
         }
         if (builtMessageList.size() > 0) transcriptMessages.add("```\n" + String.join("\n", builtMessageList) + "\n```");
 
