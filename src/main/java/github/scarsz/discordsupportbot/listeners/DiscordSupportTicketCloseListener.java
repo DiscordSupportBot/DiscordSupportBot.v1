@@ -2,7 +2,10 @@ package github.scarsz.discordsupportbot.listeners;
 
 import github.scarsz.discordsupportbot.DiscordSupportBot;
 import github.scarsz.discordsupportbot.GuildInfo;
-import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.entities.ISnowflake;
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.MessageHistory;
+import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.requests.RestAction;
@@ -19,6 +22,10 @@ public class DiscordSupportTicketCloseListener extends ListenerAdapter {
     public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent event) {
         Thread thread = new Thread(() -> handleTicketClose(event));
         thread.setName("Ticket closure thread - " + event.getChannel().getId() + " by " + event.getUser().getId());
+        thread.setUncaughtExceptionHandler((t, e) -> {
+            e.printStackTrace();
+            t.interrupt();
+        });
         thread.start();
     }
 
