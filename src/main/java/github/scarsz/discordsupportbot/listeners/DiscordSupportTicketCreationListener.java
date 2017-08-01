@@ -11,7 +11,9 @@ import java.util.List;
 public class DiscordSupportTicketCreationListener extends ListenerAdapter {
 
     String messageTemplate = "**__Author:__** {AUTHOR}\n" +
-            "**__Message:__** {MESSAGE}";
+            "**__Message:__** {MESSAGE}\n" +
+            "\n" +
+            "*To close this ticket, the ticket author needs to react to this message. Doing so will mark the ticket as solved. People with the following roles can close the ticket as well if necessary: {CLOSERS}*";
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
@@ -47,6 +49,7 @@ public class DiscordSupportTicketCreationListener extends ListenerAdapter {
         newChannel.sendMessage(messageTemplate
                 .replace("{AUTHOR}", event.getAuthor().getAsMention())
                 .replace("{MESSAGE}", event.getMessage().getRawContent())
+                .replace("{CLOSERS}", "`" + String.join(", ", guildInfo.getRolesAllowedToCloseTickets()) + "`")
         ).queue(message -> message.addReaction(guildInfo.getDefaultReactionEmoji()).queue());
 
         event.getMessage().delete().queue();
