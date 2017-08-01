@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,8 +26,8 @@ import java.util.Objects;
 
 public class DiscordSupportBot {
 
-    @Getter private final File jarFolder = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath());
-    @Getter private final File guildConfigurationsFile = new File(jarFolder, "guilds.json");
+    @Getter private File jarFolder;
+    @Getter private File guildConfigurationsFile;
 
     @Getter private static DiscordSupportBot discordSupportBot;
     @Getter private JDA jda;
@@ -34,6 +35,14 @@ public class DiscordSupportBot {
 
     public DiscordSupportBot(String botToken) {
         DiscordSupportBot.discordSupportBot = this;
+
+        try {
+            jarFolder = new File(DiscordSupportBot.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getParentFile();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            System.exit(2);
+        }
+        guildConfigurationsFile = new File(jarFolder, "guilds.json");
 
         System.out.print("Hooking shutdown... ");
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
