@@ -69,7 +69,7 @@ public class DiscordSupportTicketCloseListener extends ListenerAdapter {
         if (builtMessageList.size() > 0) transcriptMessages.add("```\n" + String.join("\n", builtMessageList) + "\n```");
 
         List<User> usersToMessageTranscriptTo = history.getRetrievedHistory().stream().map(Message::getAuthor).filter(user -> !user.isBot()).distinct().collect(Collectors.toList());
-        usersToMessageTranscriptTo.stream().map(User::openPrivateChannel).map(RestAction::complete).forEach(privateChannel -> {
+        usersToMessageTranscriptTo.stream().filter(user -> !user.isFake()).map(User::openPrivateChannel).map(RestAction::complete).forEach(privateChannel -> {
             privateChannel.sendMessage("Support ticket transcript regarding " + ticketAuthor + "'s ticket in " + event.getGuild()).queue();
             for (String transcriptMessage : transcriptMessages) {
                 privateChannel.sendMessage(transcriptMessage).queue();
