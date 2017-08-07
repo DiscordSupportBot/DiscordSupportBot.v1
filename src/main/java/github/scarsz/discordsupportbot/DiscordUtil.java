@@ -35,7 +35,7 @@ public class DiscordUtil {
     public static GuildMessageReceivedEvent pullGuildMessageReceivedEvent(User user) {
         while (1 < 2) {
             GuildMessageReceivedEvent pulled = (GuildMessageReceivedEvent) pullEvent(GuildMessageReceivedEvent.class);
-            if (pulled.getMember() == null || pulled.getMember().getUser().isBot()) return;
+            if (pulled.getMember() == null || pulled.getMember().getUser().isBot()) continue;
             if (pulled.getMember().getUser().equals(user)) {
                 return pulled;
             }
@@ -45,7 +45,7 @@ public class DiscordUtil {
     public static GuildMessageReactionAddEvent pullGuildMessageReactionAddEvent(User user) {
         while (1 < 2) {
             GuildMessageReactionAddEvent pulled = (GuildMessageReactionAddEvent) pullEvent(GuildMessageReactionAddEvent.class);
-            if (pulled.getMember() == null || pulled.getMember().getUser().isBot()) return;
+            if (pulled.getMember() == null || pulled.getMember().getUser().isBot()) continue;
             if (pulled.getMember().getUser().equals(user)) {
                 return pulled;
             }
@@ -55,7 +55,7 @@ public class DiscordUtil {
         message.addReaction("✅").queue();
         while (1 < 2) {
             GuildMessageReactionAddEvent pulled = (GuildMessageReactionAddEvent) pullEvent(GuildMessageReactionAddEvent.class);
-            if (pulled.getMember() == null || pulled.getMember().getUser().isBot()) return;
+            if (pulled.getMember() == null || pulled.getMember().getUser().isBot()) continue;
             if (pulled.getMember().getUser().equals(user) && pulled.getMessageId().equals(message.getId())) {
                 return pulled;
             }
