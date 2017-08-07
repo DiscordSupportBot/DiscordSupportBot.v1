@@ -31,7 +31,7 @@ public class DiscordSetupListener extends ListenerAdapter {
 
     public void handleSetup(GuildMessageReceivedEvent event) {
         if (guildsBeingSetup.contains(event.getGuild().getId())) return;
-        if (!event.getMember().isOwner()) return;
+        if (event.getMember() == null || event.getMember.isBot() || !event.getMember().isOwner()) return;
 
         GuildInfo guildInfo = DiscordSupportBot.getGuildInfo(event.getGuild());
         DiscordSupportBot.get().getRegisteredGuilds().remove(guildInfo);
