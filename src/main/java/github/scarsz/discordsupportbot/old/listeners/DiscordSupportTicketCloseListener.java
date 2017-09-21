@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
 public class DiscordSupportTicketCloseListener extends ListenerAdapter {
@@ -39,6 +40,17 @@ public class DiscordSupportTicketCloseListener extends ListenerAdapter {
         boolean allowedToClose = (guildInfo.isAuthorCanCloseTicket() && event.getUser().equals(ticketAuthor)) ||
                 event.getMember().getRoles().stream().map(ISnowflake::getId).anyMatch(s -> guildInfo.getRolesAllowedToCloseTickets().contains(s));
         if (!allowedToClose) return;
+
+        // event.getMessageId()
+        try {
+            MessageHistory history = event.getChannel().getHistory();
+            List<Message> retrievedMessages = null;
+            while (retrievedMessages == null || retrievedMessages.size() > 0) retrievedMessages = history.retrievePast(100).complete();
+            Message firstMessage = history.getRetrievedHistory().get(history.getRetrievedHistory().size() - 1);
+            if (!event.getMessageId().equals(firstMessage.getId())) return;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         event.getChannel().sendMessage("Ticket marked as solved by " + event.getUser().getAsMention() + "! Closing ticket " + (guildInfo.isPmTranscriptsOnClose() ? "and PMing the transcript to all participants " : "") + "in " + guildInfo.getSecondsUntilTicketCloses() + " seconds...").complete();
 
@@ -69,7 +81,7 @@ public class DiscordSupportTicketCloseListener extends ListenerAdapter {
         if (builtMessageList.size() > 0) transcriptMessages.add("```\n" + String.join("\n", builtMessageList) + "\n```");
 
         List<User> usersToMessageTranscriptTo = history.getRetrievedHistory().stream().map(Message::getAuthor).filter(user -> !user.isBot()).distinct().collect(Collectors.toList());
-        usersToMessageTranscriptTo.stream().map(User::openPrivateChannel).map(RestAction::complete).forEach(privateChannel -> {
+        usersToMessageTranscriptTo.stream().filter(user -> !user.isFake()).map(User::openPrivateChannel).map(RestAction::complete).forEach(privateChannel -> {
             privateChannel.sendMessage("Support ticket transcript regarding " + ticketAuthor + "'s ticket in " + event.getGuild()).queue();
             for (String transcriptMessage : transcriptMessages) {
                 privateChannel.sendMessage(transcriptMessage).queue();
