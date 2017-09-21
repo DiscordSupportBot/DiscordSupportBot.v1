@@ -1,8 +1,8 @@
-package github.scarsz.discordsupportbot.listeners;
+package github.scarsz.discordsupportbot.old.listeners;
 
-import github.scarsz.discordsupportbot.DiscordSupportBot;
-import github.scarsz.discordsupportbot.DiscordUtil;
-import github.scarsz.discordsupportbot.GuildInfo;
+import github.scarsz.discordsupportbot.old.DiscordSupportBot;
+import github.scarsz.discordsupportbot.old.DiscordUtil;
+import github.scarsz.discordsupportbot.old.GuildInfo;
 import net.dv8tion.jda.core.entities.ISnowflake;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;

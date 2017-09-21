@@ -1,8 +1,8 @@
-package github.scarsz.discordsupportbot;
+package github.scarsz.discordsupportbot.old;
 
-import github.scarsz.discordsupportbot.listeners.DiscordSetupListener;
-import github.scarsz.discordsupportbot.listeners.DiscordSupportTicketCloseListener;
-import github.scarsz.discordsupportbot.listeners.DiscordSupportTicketCreationListener;
+import github.scarsz.discordsupportbot.old.listeners.DiscordSetupListener;
+import github.scarsz.discordsupportbot.old.listeners.DiscordSupportTicketCloseListener;
+import github.scarsz.discordsupportbot.old.listeners.DiscordSupportTicketCreationListener;
 import lombok.Getter;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;

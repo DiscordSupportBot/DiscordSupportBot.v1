@@ -1,7 +1,7 @@
-package github.scarsz.discordsupportbot.listeners;
+package github.scarsz.discordsupportbot.old.listeners;
 
-import github.scarsz.discordsupportbot.DiscordSupportBot;
-import github.scarsz.discordsupportbot.GuildInfo;
+import github.scarsz.discordsupportbot.old.DiscordSupportBot;
+import github.scarsz.discordsupportbot.old.GuildInfo;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;

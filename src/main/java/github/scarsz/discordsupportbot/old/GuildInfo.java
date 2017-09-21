@@ -1,4 +1,4 @@
-package github.scarsz.discordsupportbot;
+package github.scarsz.discordsupportbot.old;
 
 import lombok.Getter;
 import lombok.Setter;
