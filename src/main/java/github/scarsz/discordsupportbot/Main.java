@@ -8,11 +8,7 @@ public class Main {
             System.exit(1);
         }
 
-        try {
-            new DiscordSupportBot(args[0]);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        new DiscordSupportBot(args[0]);
     }
 
 }

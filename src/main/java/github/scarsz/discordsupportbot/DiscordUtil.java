@@ -1,4 +1,4 @@
-package github.scarsz.discordsupportbot.old;
+package github.scarsz.discordsupportbot;
 
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.Event;

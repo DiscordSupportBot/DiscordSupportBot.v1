@@ -1,7 +1,8 @@
-package github.scarsz.discordsupportbot.old.listeners;
+package github.scarsz.discordsupportbot.listeners;
 
-import github.scarsz.discordsupportbot.old.DiscordSupportBot;
-import github.scarsz.discordsupportbot.old.GuildInfo;
+import github.scarsz.discordsupportbot.DiscordSupportBot;
+import github.scarsz.discordsupportbot.GuildInfo;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class DiscordSupportTicketCreationListener extends ListenerAdapter {
 
-    String messageTemplate = "**__Author:__** {AUTHOR}\n" +
+    private final String MESSAGE_TEMPLATE = "**__Author:__** {AUTHOR}\n" +
             "**__Message:__** {MESSAGE}\n" +
             "\n" +
             "*To close this ticket, the ticket author needs to react to this message. Doing so will mark the ticket as solved. People with the following roles can close the ticket as well if necessary: {CLOSERS}*";
@@ -44,10 +45,20 @@ public class DiscordSupportTicketCreationListener extends ListenerAdapter {
     private void handleNewTicket(GuildMessageReceivedEvent event) {
         GuildInfo guildInfo = DiscordSupportBot.getGuildInfo(event.getGuild());
 
-        TextChannel newChannel = (TextChannel) event.getGuild().getController().createTextChannel(event.getChannel().getName() + "-" + event.getAuthor().getId()).complete();
+        // create the new channel, inside of a category if possible
+        String channelName = event.getChannel().getName() + "-" + event.getAuthor().getId();
+        TextChannel newChannel;
+        if (event.getChannel().getParent() == null) {
+            newChannel = (TextChannel) event.getGuild().getController().createTextChannel(channelName).complete();
+        } else {
+            newChannel = (TextChannel) event.getChannel().getParent().createTextChannel(channelName).complete();
+        }
         event.getGuild().getController().modifyTextChannelPositions().selectPosition(newChannel).moveTo(event.getChannel().getPosition() + 1).queue();
 
-        newChannel.sendMessage(messageTemplate
+        // make the author forcefully have message read/write permission
+        newChannel.createPermissionOverride(event.getMember()).setAllow(Permission.MESSAGE_READ, Permission.MESSAGE_WRITE).queue();
+
+        newChannel.sendMessage(MESSAGE_TEMPLATE
                 .replace("{AUTHOR}", event.getAuthor().getAsMention())
                 .replace("{MESSAGE}", event.getMessage().getRawContent())
                 .replace("{CLOSERS}", "`" + String.join(", ", guildInfo.getRolesAllowedToCloseTickets().stream().map(s -> event.getGuild().getRoleById(s).getName()).collect(Collectors.toList())) + "`")

@@ -1,8 +1,9 @@
-package github.scarsz.discordsupportbot.old.listeners;
+package github.scarsz.discordsupportbot.listeners;
 
-import github.scarsz.discordsupportbot.old.DiscordSupportBot;
-import github.scarsz.discordsupportbot.old.DiscordUtil;
-import github.scarsz.discordsupportbot.old.GuildInfo;
+import github.scarsz.discordsupportbot.DiscordSupportBot;
+import github.scarsz.discordsupportbot.DiscordUtil;
+import github.scarsz.discordsupportbot.GuildInfo;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.ISnowflake;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
@@ -31,7 +32,7 @@ public class DiscordSetupListener extends ListenerAdapter {
 
     public void handleSetup(GuildMessageReceivedEvent event) {
         if (guildsBeingSetup.contains(event.getGuild().getId())) return;
-        if (event.getMember() == null || event.getMember().getUser().isBot() || !event.getMember().isOwner()) return;
+        if (event.getMember() == null || event.getMember().getUser().isBot() || (!event.getMember().isOwner() && !event.getMember().hasPermission(Permission.ADMINISTRATOR))) return;
 
         GuildInfo guildInfo = DiscordSupportBot.getGuildInfo(event.getGuild());
         DiscordSupportBot.get().getRegisteredGuilds().remove(guildInfo);
