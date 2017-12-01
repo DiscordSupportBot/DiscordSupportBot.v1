@@ -8,7 +8,12 @@ public class Main {
             System.exit(1);
         }
 
-        new DiscordSupportBot(args[0]);
+        try {
+            new DiscordSupportBot(args[0]);
+        } catch (Exception e) {
+            System.err.println("Failed to start: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
 }
