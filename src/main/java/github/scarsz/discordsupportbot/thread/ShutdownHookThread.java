@@ -1,10 +1,10 @@
 package github.scarsz.discordsupportbot.thread;
 
-import github.scarsz.discordsupportbot.DiscordSupportBot;
+import github.scarsz.discordsupportbot.SupportBot;
 
 public class ShutdownHookThread extends Thread {
 
-    public ShutdownHookThread(DiscordSupportBot bot) {
+    public ShutdownHookThread(SupportBot bot) {
         //TODO
     }
 

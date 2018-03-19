@@ -9,7 +9,7 @@ public class Main {
         }
 
         try {
-            new DiscordSupportBot(args[0]);
+            new SupportBot(args[0]);
         } catch (Exception e) {
             System.err.println("Failed to start: " + e.getMessage());
             e.printStackTrace();
